@@ -11,6 +11,7 @@ namespace StringCalculator
         #region Regex Patterns
 
         string DefaultDelimiterPattern = @"[\/]{2}[^\d-]\\n";
+        string DefaultDelimiterNumericPattern = @"[\/]{2}[\d]\\n";
         string ExpandedDelimiterPattern = @"[[][^\[\]]*[]]";
         string HyphenNoBracePattern = @"[\/]{2}[-]\\n";
         string HyphenBracesPattern = @"[\/]{2}.*[[][-][]].*";
@@ -54,7 +55,19 @@ namespace StringCalculator
             return returnString;
         }
 
-        public string ReplaceCustomDelimiter_Expanded(string inputString)
+        public bool isCustomDelimiter(string inputString)
+        {
+            bool leadingBackslash = Regex.Match(inputString, TwoLeadingBackslashPattern).Success;
+
+            return leadingBackslash;
+        }
+
+
+        #endregion
+
+        #region Private Methods
+
+        private string ReplaceCustomDelimiter_Expanded(string inputString)
         {
             string returnString = (Regex.Split(inputString, @"\\n"))[1] ?? throw new FormatException();
 
@@ -97,11 +110,8 @@ namespace StringCalculator
             return returnString;
         }
 
-        public string ReplaceCustomDelimiter(string inputString)
+        private string ReplaceCustomDelimiter(string inputString)
         {
-            if (!isDefaultDelimiter(inputString))
-                throw new FormatException();
-
             string returnString = (Regex.Split(inputString, @"\\n"))[1] ?? throw new FormatException();
 
             Regex delimiterRegex = new Regex(DefaultDelimiterPattern);
@@ -112,19 +122,11 @@ namespace StringCalculator
             return returnString;
         }
 
-        public bool isCustomDelimiter(string inputString)
-        {
-            bool leadingBackslash = Regex.Match(inputString, TwoLeadingBackslashPattern).Success;
-
-            return leadingBackslash;
-        }
-
-
-        #endregion
-
-        #region Private Methods
         public bool isDefaultDelimiter(string inputString)
         {
+            if (Regex.Match(inputString, DefaultDelimiterNumericPattern).Success)
+                throw new ArgumentException();
+
             return Regex.Match(inputString, DefaultDelimiterPattern).Success;
         }
 

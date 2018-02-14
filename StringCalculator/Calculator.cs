@@ -59,10 +59,7 @@ namespace StringCalculator
                     if (regexService.IsSingleHyphen(fullInput))
                         fullInput = regexService.ReplaceHyphen(fullInput);
 
-                    if (regexService.isDefaultDelimiter(fullInput))
-                        varyInput = regexService.ReplaceCustomDelimiter(fullInput);
-                    else
-                        varyInput = regexService.ReplaceCustomDelimiter_Expanded(fullInput);
+                    varyInput = regexService.Replace(fullInput);
                     parseValue = new string[] { "," };
 
                 }
