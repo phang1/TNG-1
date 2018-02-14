@@ -69,7 +69,7 @@ namespace StringCalculator
 
         private string ReplaceCustomDelimiter_Expanded(string inputString)
         {
-            string returnString = (Regex.Split(inputString, @"\\n"))[1] ?? throw new FormatException();
+            string returnString = SplitString_NewLine(inputString);
 
             List<string> delimiterList = new List<string>();
 
@@ -112,7 +112,7 @@ namespace StringCalculator
 
         private string ReplaceCustomDelimiter(string inputString)
         {
-            string returnString = (Regex.Split(inputString, @"\\n"))[1] ?? throw new FormatException();
+            string returnString = SplitString_NewLine(inputString);
 
             Regex delimiterRegex = new Regex(DefaultDelimiterPattern);
             string delimiter = delimiterRegex.Match(inputString).Value;
@@ -122,7 +122,7 @@ namespace StringCalculator
             return returnString;
         }
 
-        public bool isDefaultDelimiter(string inputString)
+        private bool isDefaultDelimiter(string inputString)
         {
             if (Regex.Match(inputString, DefaultDelimiterNumericPattern).Success)
                 throw new ArgumentException();
@@ -133,6 +133,11 @@ namespace StringCalculator
         private bool isDelimiterNonNumeric(string inputString)
         {
             return int.TryParse(inputString, out int value);
+        }
+
+        private string SplitString_NewLine(string inputString)
+        {
+            return (Regex.Split(inputString, @"\\n"))[1] ?? throw new FormatException();
         }
 
         #endregion
